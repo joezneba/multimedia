@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+
+{% block titulo1 %}
+    {{ video.nombre }}
+{% endblock %}
+
+{% block subtitulo1 %}
+{% endblock %}
+{% block texto %}
+{% endblock %}
+
+
+{% block container %}
+
+    {% if video.formato == 'mp4' %}
+        <video id="my-video" class="video-js vjs-default-skin  vjs-16-9" controls preload="auto"
+           width="100" height="100" poster="{{ video.caratula.url }}" data-setup="{}">
+            <source src="{{ video.file.url }}" type='video/mp4'>
+
+        </video>
+    {% elif video.formato == 'flv' %}
+        <video id="videojs-flvjs-player" class="video-js vjs-default-skin vjs-16-9" preload="auto"
+               controls width="100" height="100" poster="{{ video.caratula.url }}">
+            <source src="{{ video.file.url }}" type='video/x-flv'>
+        </video>
+
+    {% endif %}
+
+
+
+
+
+    <div id="divSinopsis">
+        <h3>SINOPSIS:</h3>
+        <p>{{ video.sinopsis }}</p>
+    </div>
+
+    <script>
+        videojs('videojs-flvjs-player', {
+            techOrder: ['html5', 'flvjs'],
+            flvjs: {
+                mediaDataSource: {
+                    isLive: true,
+                    cors: true,
+                    withCredentials: false
+                }
+            }
+        });
+    </script>
+
+{% endblock container %}

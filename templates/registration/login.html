@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+
+{% block header-conteiner %} {% endblock %}
+
+{% block container %}
+
+    <h2 class="subtitulo">- Inicio de Sesión -</h2>
+
+    <div class="div_form">
+
+        <div class="row">
+            <form method="post" action="{% url 'login' %}" class="formulario">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div>
+                        {% if form.errors %}
+                            {{ form.non_field_errors }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <label for="id_username">Correo Electrónico:</label>
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <label for="id_password">Contraseña:</label>
+                        {{ form.password }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="botones">
+                        <input class="sendButton" type="submit" value="Iniciar Sesión" />
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

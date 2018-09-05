@@ -1,0 +1,212 @@
+{% load staticfiles %}
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+	    <title>Multimedia</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+        <link rel="stylesheet" href="{% static 'css/zerogrid.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+        <link rel="stylesheet" href="{% static 'css/video-js.css' %}">
+
+
+        <!--<link rel="stylesheet" href="{#% static 'css/bootstrap/css/bootstrap.min.css' %#}"> -->
+        {% block estilos %} {% endblock %}
+
+        <script src="{% static 'js/jquery-latest.min.js' %}"></script>
+        <script src="{% static 'js/jquery-ui.js' %}"></script>
+
+        <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/video.min.js' %}"></script>
+        <!--<script src="https://unpkg.com/videojs-flash/dist/videojs-flash.js"> </script>-->
+        <script src="{% static 'js/videojs-contrib-hls.min.js' %}"></script>
+        <script src="https://unpkg.com/flv.js@1.4.2/dist/flv.min.js"></script>
+        <script src="https://unpkg.com/videojs-flvjs/dist/videojs-flvjs.min.js"></script>
+
+        {% block scripts %} {% endblock %}
+
+    </head>
+
+    <body>
+        <div class="wrap-body">
+            <header>
+                {% block header %}
+                <div class="wrap-header zerogrid">
+                    <div class="row">
+                        <div id="buscador">
+                            {% if user.is_authenticated %}
+                                <input type="text" placeholder="Buscar" id="buscarVideo">
+                            {% endif %}
+                        </div>
+                        <div id="cssmenu">
+
+                            <ul>
+
+                                {% if user.is_authenticated %}
+
+                                <li class='li-header'>
+                                    <a id="a-user" href="#">{{ request.user.get_full_name }}</a>
+{#                                    <img id="img-user" src="{% static 'media/iconos/user.png' %}">#}
+                                </li>
+
+                                {% endif %}
+
+                                <li><a href="{% url 'index' %}">Inicio</a></li>
+                                <li><a href="#">Clasificación</a>
+                                    <ul>
+
+                                        {% for tipo in tipo_video %}
+                                            <li><a href='#'>{{ tipo.nombre }}</a>
+                                                <ul>
+                                                    <li><a href='{% url 'index' %}'>Todos</a></li>
+                                                    {% if tipo.nombre == 'Películas' %}
+                                                        {% for cat in categorias %}
+                                                            <li><a href='{% url 'filtroCategorias' cat.pk %}'>{{ cat.nombre_categoria }}</a></li>
+                                                        {% endfor %}
+                                                    {% endif %}
+
+                                                    {% if tipo.nombre == 'En vivo' %}
+                                                        <li><a href="{% url 'streaming' %}">Hola</a></li>
+                                                    {% endif %}
+                                                </ul>
+                                            </li>
+
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                {% if user.is_authenticated %}
+                                    <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                                {% else %}
+                                    <li><a href="{% url 'registro' %}">Regístrate</a></li>
+                                {% endif %}
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+                {% endblock header %}
+            </header>
+
+
+            <section id="container">
+
+                {% if user.is_authenticated %}
+                    <div class="div_container_menu" id="sub_menu">
+                        <div class="div_container_sub">
+                            <h6 style="color: #E5E3E3;">MENÚ</h6>
+
+                            <ul id="lista_menu_lateral">
+
+                                <li>
+                                    <a href="{% url 'index' %}">
+                                        <h6><span class="ui-icon ui-icon-home"></span> Inicio</h6>
+                                    </a>
+                                </li>
+                                <li >
+                                    <h6><span class="ui-icon ui-icon-video"></span> Clasificación</h6>
+                                    <ul>
+                                        {% for tipo in tipo_video %}
+                                            {% if tipo.nombre == 'En vivo' %}
+                                                <li><span class="ui-icon ui-icon-plusthick"></span><a href='{% url 'streaming' %}'>{{ tipo.nombre }}</a>
+                                            {% else %}
+                                            <li><span class="ui-icon ui-icon-plusthick"></span><a href='#'>{{ tipo.nombre }}</a>
+
+                                                <ul>
+                                                    {% if tipo.nombre == 'Películas' %}
+                                                        {% for cat in categorias %}
+                                                            <li id="genero_videos"><a href='{% url 'filtroCategorias' cat.pk %}'>{{ cat.nombre_categoria }}</a></li>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </ul>
+
+                                            {% endif %}
+
+                                            </li>
+
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                {% endif %}
+
+                <div class="zerogrid">
+                    <div class="wrap-container clearfix div_container">
+                        <div id="main-content">
+                            <div class="row wrap-content">
+                                {% block header-conteiner %}
+                                <div class="header">
+
+                                    <h1>
+                                        {% block titulo1 %}
+
+                                        {% endblock %}
+                                    </h1>
+						            <span>
+                                        {% block subtitulo1 %}
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. </br>Iste ratione molestias magni.
+                                        {% endblock %}
+                                    </span>
+                                    <p>{% block texto %}{% endblock %}</p>
+                                </div>
+                                {% endblock %}
+                                <div class="row">
+                                    {% block container %}
+
+
+                                    {% endblock container %}
+                                </div>
+                            </div>
+
+                        {% block paginador %}
+                        {% endblock %}
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        <!-- Modal para comprobar perfil  -->
+            <div id="dialog" title="Completa tu perfil" hidden>
+                <label for="cedula">Cédula</label>
+                <input type="text" id="cedula" required>
+                <label for="telefono">Teléfono/Celular</label>
+                <input type="text" id="telefono" required>
+                <label for="fecha_nac">Fecha de Nacimiento</label>
+                <input type="date" id="fecha_nac" required>
+
+                <button class="ui-button" id="btnGuardar" onclick="guardarPefil()">Guardar</button>
+            </div>
+
+
+            <footer>
+                <div class="zerogrid">
+                    <div class="wrap-footer">
+                        <div class="row">
+                           <!-- <h3>Contacto</h3>
+                            <span>Teléfono / +00 000 00 0000 </span></br>
+                            <span>Email / info@domain.com  </span></br> -->
+
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </body>
+
+    {% block funciones %}
+    {% endblock %}
+
+    <script>
+        var token = '{{ csrf_token }}';
+        var user_auth = '{{ user.is_authenticated }}'
+    </script>
+</html>

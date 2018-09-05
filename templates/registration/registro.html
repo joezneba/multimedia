@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+
+{% block header-conteiner %} {% endblock %}
+
+{% block container %}
+
+    <h2 class="subtitulo">- Registro -</h2>
+
+    <div class="div_form">
+        <form method="post" class="formulario">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="botones">
+                <input class="sendButton" type="submit" value="Registrarse" />
+            </div>
+        </form>
+    </div>
+
+    <script>
+        var registro = true;
+    </script>
+{% endblock container %}
+

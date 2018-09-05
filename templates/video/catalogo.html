@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+
+{% block titulo1 %}
+    {% if categoria_actual %}
+        {{ categoria_actual }}
+    {% else %}
+        Agregadas recientemente
+    {% endif %}
+{% endblock %}
+
+{% block subtitulo1 %}{% endblock %}
+
+
+
+{% block container %}
+
+    {% for vid in videos %}
+        <div class="col-1-4">
+            <div class="wrap-col">
+                <div class="item-container">
+                    <a href="{% url 'reproductor' vid.pk %}">
+                        <div class="item-caption">
+                            <div class="item-caption-inner">
+                                <div class="item-caption-inner1">
+                                    <span style="margin-bottom: 100px;"><button id="btnVer"><b>Ver</b></button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <img id="imagen_caratula"
+                             src="{{ vid.caratula.url }}"
+                        />
+                        <div id="txtTitulo">
+                            <h5>{{ vid.nombre }}</h5>
+                            <p>{{ vid.categoria_id.nombre_categoria }}</p>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+{% endblock %}
+
+{% block paginador %}
+    <div style="float: right;">
+        <ul style="padding-right: 0px;
+   padding-left: 0px;
+   padding-bottom: 0px;
+   padding-top: 0px;
+   margin: 0px;">
+            <li class="disabled" style="list-style-type: none;
+   display: inline;
+   padding-right: 5px;"><a href="#"><span class="ui-icon ui-icon-circle-arrow-w"></span></a></li>
+            {% if videos.has_previous %}
+                <li class="waves-effect" style="list-style-type: none;
+   display: inline;
+   padding-right: 5px;"><a href="?page={{ videos.previous_page_number }}">{{ videos.previous_page_number }}</a></li>
+            {% endif %}
+            <li class="active" style="list-style-type: none;
+   display: inline;
+   padding-right: 5px;"><a href="#">{{ videos.number }}</a></li>
+            {% if videos.has_next %}
+                <li class="waves-effect" style="list-style-type: none;
+   display: inline;
+   padding-right: 5px;"><a href="?page={{ videos.next_page_number }}">{{ videos.next_page_number }}</a></li>
+            {% endif %}
+            <li class="waves-effect" style="list-style-type: none;
+   display: inline;
+   padding-right: 5px;"><a href="#"><span class="ui-icon ui-icon-circle-arrow-e"></span></a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block funciones %}
+    <script>
+        var url = "{% url 'reproductor' 123 %}";
+    </script>
+
+{% endblock %}
